@@ -9,5 +9,5 @@ services:
     ports:
       - "8888:8888"
     container_name: jupyter_notebook
-    command: "start-notebook.sh --NotebookApp.token="
+    command: "start-notebook.sh --ServerApp.token=''"
     restart: unless-stopped
