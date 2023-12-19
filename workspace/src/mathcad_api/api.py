@@ -1,6 +1,7 @@
 from scipy.stats import binom
-from .utils import tolist
 from matplotlib.pyplot import *
+
+import math
 
 
 class MathcadAPI:
@@ -95,10 +96,21 @@ class MathcadAPI:
             s += x[i] * pow(2, len(x) - i - 1)
         return s
 
-    def trunc(self, z, y):
+    @staticmethod
+    def trunc(z, y):
         new_z = []
         for i in z:
             new_z.append(i // y)
 
         new_z = [i * y for i in new_z]
         return new_z
+
+    @staticmethod
+    def lowpass(f, n):
+        def f_func(m, f):
+            if m == 0:
+                return 2 * f
+            else:
+                return (math.sin(2 * math.pi * f * m)) / (m * math.pi)
+
+        return [f_func(i - ((n - 1) / 2), f) for i in range(0, n, 1)]
