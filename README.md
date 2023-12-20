@@ -1,5 +1,13 @@
 ## Getting Started
 
+Install Docker (Linux recommended)
+
+https://docs.docker.com/engine/install/
+
+Install docker-compose
+
+https://docs.docker.com/compose/install/
+
 Clone this repository to your local machine:
 
 ```bash
@@ -9,20 +17,15 @@ git clone https://github.com/madwayz/FoSR.git
 Navigate to the project root directory:
 
 ```bash
-cd jupyter-docker-compose
+cd FoSR
 ```
 
 Build the the image for the Jupyter Notebook server:
 
 ```bash
-docker-compose build
+docker-compose up --build --force-recreate -d
 ```
 
-Start the Jupyter Notebook server:
-
-```bash
-docker-compose up
-```
 
 After running this command, the Jupyter Notebook server should be accessible at `http://localhost:8888`.
 
