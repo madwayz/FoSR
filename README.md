@@ -44,7 +44,7 @@ python3 -m pip install virtualenv
 Create venv
 
 ```bash
-virtualenv -p python3 venv
+python3 -m virtualenv venv
 ```
 
 Activate venv
