@@ -26,9 +26,43 @@ Build the the image for the Jupyter Notebook server:
 docker-compose up --build --force-recreate -d
 ```
 
-
 After running this command, the Jupyter Notebook server should be accessible at `http://localhost:8888`.
 
+For venv environment
+
+Navigate to the project root directory:
+```
+cd FoSR
+```
+
+Install virtualenv
+
+```bash
+python3 -m pip install virtualenv
+```
+
+Create venv
+
+```bash
+virtualenv -p python3 venv
+```
+
+Activate venv
+```bash
+source venv/bin/activate
+```
+
+Install project requirements
+
+```bash
+python3 -m pip install -r requirements.txt
+```
+
+Run script
+
+```bash
+python3 workspace/src/sync.py
+```
 
 ## Directory Structure
 
