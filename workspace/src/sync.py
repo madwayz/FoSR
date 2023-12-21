@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[94]:
+# In[225]:
 
 
 import numpy as np
@@ -13,7 +13,7 @@ n = range(0, L)
 a4f2 = np.array((1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0))
 
 
-# In[95]:
+# In[226]:
 
 
 from src.mathcad_api import MathcadAPI
@@ -21,7 +21,7 @@ from src.mathcad_api import MathcadAPI
 mcad = MathcadAPI()
 
 
-# In[96]:
+# In[227]:
 
 
 mass = np.array(mcad.rbinom(N, 1, 0.5))
@@ -31,7 +31,7 @@ stek_ish = mcad.stack(massdv1n, a4f2, mass)
 stek_bip = [x * 2 - 1 for x in stek_ish]
 
 
-# In[97]:
+# In[228]:
 
 
 tau = 1 / B
@@ -41,7 +41,7 @@ t = np.arange(0, tau * len(stek_bip) - td/2, td)
 #for i in t: print(i)
 
 
-# In[98]:
+# In[229]:
 
 
 import math
@@ -49,7 +49,7 @@ a_t_stek_bip = [stek_bip[math.floor(t_i/tau)] for t_i in t]
 stek1_t_td = a_t_stek_bip
 
 
-# In[99]:
+# In[230]:
 
 
 import matplotlib.pyplot as plt
@@ -78,16 +78,16 @@ fnes = 100
 
 signal_real = [signal[x] * np.exp(-1j * 2 * math.pi * fdop * td * x) * np.exp(-1j * fi * x) for x in range(len(signal) - 1)]
 
-pomexa1 = np.random.normal(0, sigma, len(signal_real) + 1)
-pomexa2 = np.random.normal(0, sigma, len(signal_real) + 1)
+pomexa1 = np.random.normal(0, sigma, len(signal_real))
+pomexa2 = np.random.normal(0, sigma, len(signal_real))
 
-I = [x.real for x in signal] + pomexa1
-Q = [x.imag for x in signal] + pomexa2
+I = [x.real for x in signal_real] + pomexa1
+Q = [x.imag for x in signal_real] + pomexa2
 
 n4 = range(280, 480+1)
 
 
-# In[100]:
+# In[231]:
 
 
 fig, ax = plt.subplots(figsize=(10, 6))
@@ -96,7 +96,7 @@ plt.xlabel("I")
 plt.ylabel("Q")
 
 
-# In[101]:
+# In[232]:
 
 
 plt.figure(figsize=(13, 4))
@@ -105,7 +105,7 @@ plt.ylabel("I_n4")
 plt.xlabel("mod(n4, 2*8)")
 
 
-# In[102]:
+# In[233]:
 
 
 signal_kon = np.convolve(I, fn4, "full")
@@ -117,7 +117,7 @@ plt.ylabel("SignalKon_n5")
 plt.xlabel("n5")
 
 
-# In[105]:
+# In[234]:
 
 
 semp = int(fd/B)
@@ -136,16 +136,15 @@ def symbolsyn(x):
     
     global semp
     global por
-
     for i in range(0, len(x) - 1):
         if (i >= (2 * semp - 1)) and (((i - semp) % semp) == (semp - 1)):
-            j = int(i + cor - 15)
+            j = int(i + cor - (semp - 1))
             # print(cor)
             # print(i, semp, j, int(j + (semp / 2) - 1))
             s1 = sum(x[int(j): int(j + (semp / 2) - 1)])
-            s2 = sum(x[j + (semp / 2): int(j + semp - 1)])
+            s2 = sum(x[j + (semp // 2): int(j + semp - 1)])
             s3 = sum(x[j + semp: int(j + 1.5 * semp - 1)])
-            s4 = sum(x[j + (semp * 1.5): int(j + 2 * semp - 1)])
+            s4 = sum(x[j + int(semp * 1.5): int(j + 2 * semp - 1)])
 
             s12 = s1 + s2
             s23 = s2 + s3
@@ -165,7 +164,7 @@ def symbolsyn(x):
     return det_ne, ind, cor_nc, acc_na
 
 
-# In[104]:
+# In[235]:
 
 
 symbols = symbolsyn(signal_kon)
@@ -188,7 +187,7 @@ osh_mess = [s_i ^ m for s_i, m in zip(stek_ish, mess)]
 n7 = range(0, len(osh_mess) - 1)
 
 
-# In[ ]:
+# In[236]:
 
 
 plt.figure(figsize=(16, 4))
@@ -197,16 +196,18 @@ plt.ylabel("OshMess_n7")
 plt.xlabel("n7")
 
 
-# In[ ]:
+# In[237]:
 
 
 plt.figure(figsize=(16, 4))
 plt.plot(list(n6), [acc[i] for i in n6])
+plt.plot(list(n6), [por] * len(n6))
+plt.plot(list(n6), [-por] * len(n6))
 plt.ylabel("Acc_n6")
 plt.xlabel("n6")
 
 
-# In[ ]:
+# In[238]:
 
 
 def cadrsyn(x): 
@@ -220,7 +221,7 @@ def cadrsyn(x):
     ks = 0
     mx = 0
     obrwork = 0
-    for i in range(15, len(x) - 1):
+    for i in range(semp - 1, len(x) - 1):
         zx.append(sum([c[m] * x[i - len(c) + 1 + m] for m in range(0, len(c))]))
         if abs(zx[-1]) > mx:
             ks = i + 1
@@ -229,14 +230,14 @@ def cadrsyn(x):
     return ks, mx, obrwork, zx
 
 
-# In[ ]:
+# In[239]:
 
 
 mess_kon = cadrsyn(det)
 #print(mess_kon)
 
 
-# In[ ]:
+# In[240]:
 
 
 ks = mess_kon[0]
@@ -247,7 +248,7 @@ mass_kon = mcad.submatrix(det, ks, ks + N - 1, 0, 0)
 print(mass)
 
 
-# In[ ]:
+# In[241]:
 
 
 osh_kon = sum([m_k ^ m for m_k, m in zip(mass_kon, mass)])
