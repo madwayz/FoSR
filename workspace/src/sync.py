@@ -16,7 +16,7 @@ a4f2 = np.array((1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0))
 # In[226]:
 
 
-from src.mathcad_api import MathcadAPI
+from mathcad_api import MathcadAPI
 
 mcad = MathcadAPI()
 
